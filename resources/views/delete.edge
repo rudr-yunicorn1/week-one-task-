@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+  <title>Delete Customer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Delete Customer</h1>
+ @flashMessage('error')
+  <p style="color: red;">{{ $message }}</p>
+@end
+  <form action="/customer/distroy" method="DELETE">
+    {{ csrfField() }}
+    <label>Email:</label>
+    <input type="email" name="email" required minlength="5">
+    <button type="submit">Delete Customer</button>
+  </form>
+  <p>Go back to <a href="/dashboard">dashboard</a></p>
+</body>
+</html>

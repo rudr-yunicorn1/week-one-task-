@@ -62,9 +62,14 @@ export default class AuthController {
     return view.render('register')
   }
 
-  async register({ request, response, auth, session }: HttpContext) {
+  async register({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(registerValidator)
-    const user = await User.create({ email: data.email, password: data.password })
+    console.log('DATA', data)
+    const user = await User.create({
+      full_name: data.full_name,
+      email: data.email,
+      password: data.password,
+    })
     await auth.use('web').login(user)
     return response.redirect('/dashboard')
   }
@@ -74,9 +79,10 @@ export default class AuthController {
     return response.redirect('/')
   }
 
-  async dashboard({ view, auth }: HttpContext) {
-    const result = await User.query().count('* as total')
-    const userCount = Number(result[0].total)
+  async dashboard({ view }: HttpContext) {
+    const result = await User.query().count('id')
+    const userCount = Number(result[0]['count'])
+    // console.log('User Count:', userCount)
     return view.render('dashboard', { userCount })
   }
 }

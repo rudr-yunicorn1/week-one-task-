@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+  <title>Update Customer</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Update Customer</h1>
+ @flashMessage('error')
+  <p style="color: red;">{{ $message }}</p>
+@end
+  <form action="/customer/update" method="POST">
+    {{ csrfField() }}
+    <label>Full_Name:</label>
+    <input type="txt" name="full_name" required minlength="3">
+    <label>Email:</label>
+    <input type="email" name="email" required minlength="5">
+    <label>Age:</label>
+    <input type="number" name="age" required>
+    <label>City:</label>
+    <input type="text" name="city" required>
+    <label>Position:</label>
+    <input type="text" name="position" required>
+    <button type="submit">Update Customer</button>
+  </form>
+  <p>Go back to <a href="/dashboard">dashboard</a></p>
+</body>
+</html>
