@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+<head>
+  <title>Register</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Register</h1>
+ @flashMessage('error')
+  <p style="color: red;">{{ $message }}</p>
+@end
+  <form action="/register" method="POST">
+    {{ csrfField() }}
+    <label>Full_Name:</label>
+    <input type="Name" name="full_name" required minlength="5">
+    <label>Email:</label>
+    <input type="email" name="email" required minlength="5">
+    <label>Password:</label>
+    <input type="password" name="password" required minlength="6">
+    <label>Confirm Password:</label>
+    <input type="password" name="password_confirmation" required minlength="6">
+    <button type="submit">Register</button>
+  </form>
+  <p>Already have an account? <a href="/">Login</a></p>
+</body>
+</html>

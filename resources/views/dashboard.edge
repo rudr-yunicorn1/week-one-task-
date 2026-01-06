@@ -1,0 +1,12 @@
+<!doctype html>
+<html>
+<head>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <h1>Welcome, {{ auth.user.email }}!</h1>
+  <p>There are {{ userCount }} users registered.</p>
+  <a href="/logout">Logout</a>
+</body>
+</html>
