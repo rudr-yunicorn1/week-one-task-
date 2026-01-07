@@ -13,13 +13,19 @@ export default class CustomerController {
 
   async create({ request, response }: HttpContext) {
     const data = await request.validateUsing(CustomerValidator)
-    await UserData.create(data)
+    await UserData.create({
+      full_name: data.full_name,
+      email: data.email,
+      age: data.age,
+      city: data.city,
+      position: data.position,
+    })
 
     return response.redirect('/customer/show')
   }
 
   async show({ view }: HttpContext) {
-    const customer = await User.all()
+    const customer = await UserData.all()
     return view.render('customerData', { customer })
   }
 
