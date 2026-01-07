@@ -1,6 +1,7 @@
 import type { HttpContext } from '@adonisjs/core/http'
 import { loginValidator, registerValidator } from '#validators/auth' // We'll create these
 import User from '#models/user'
+import mail from '@adonisjs/mail/services/main'
 
 export default class AuthController {
   async googleCallback({ ally, auth, response, session }: HttpContext) {
@@ -64,11 +65,20 @@ export default class AuthController {
 
   async register({ request, response, auth }: HttpContext) {
     const data = await request.validateUsing(registerValidator)
-    console.log('DATA', data)
+    // console.log('DATA', data)
     const user = await User.create({
       full_name: data.full_name,
       email: data.email,
       password: data.password,
+    })
+    await mail.send((message) => {
+      message
+        .to(user.email)
+        .from('r.techrt123@gmail.com')
+        .subject('Welcome to our App')
+        .htmlView('emails/welcome', {
+          name: user.full_name,
+        })
     })
     await auth.use('web').login(user)
     return response.redirect('/dashboard')

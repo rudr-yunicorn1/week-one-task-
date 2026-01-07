@@ -6,21 +6,21 @@ import User from '#models/user'
 import { CustomerValidator } from '#validators/customer'
 
 export default class CustomerController {
-  async index({ response }: HttpContext) {
+  async index({ view }: HttpContext) {
     const users = await User.all()
-    return response.json({ message: 'List of users', users })
+    return view.render('users', { users })
   }
 
   async create({ request, response }: HttpContext) {
     const data = await request.validateUsing(CustomerValidator)
-    const user = await UserData.create(data)
+    await UserData.create(data)
 
-    return response.json({ message: 'User created', user })
+    return response.redirect('/customer/show')
   }
 
-  async show({ response }: HttpContext) {
-    const users = await UserData.all()
-    return response.json({ message: 'List of users', users })
+  async show({ view }: HttpContext) {
+    const customer = await User.all()
+    return view.render('customerData', { customer })
   }
 
   async showcreate({ view }: HttpContext) {
@@ -31,7 +31,7 @@ export default class CustomerController {
   }
   async edit({ request, response }: HttpContext) {
     const data = await request.validateUsing(CustomerValidator)
-    const user = await UserData.query().where('email', data.email).update({
+    await UserData.query().where('email', data.email).update({
       full_name: data.full_name,
       age: data.age,
       city: data.city,

@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+  <title>Users</title>
+  <style>
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+    th { background-color: #f2f2f2; }
+    img { max-width: 50px; height: auto; }
+  </style>
+</head>
+<body>
+  <h1>Users</h1>
+  @flashMessage('success')
+    <p style="color: green;">{{ $message }}</p>
+  @end
+  @flashMessage('error')
+    <p style="color: red;">{{ $message }}</p>
+  @end
+  <a href="/customer/create">Create New Customer</a>
+  <table>
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Age</th>
+        <th>City</th>
+        <th>Positon</th>
+        {{-- <th>Actions</th> --}}
+      </tr>
+    </thead>
+    <tbody>
+      @each(customer in customer)
+        <tr>
+          <td>{{ customer.id }}</td>
+          <td>{{ customer.full_name }}</td>
+          <td>{{ customer.email }}</td>
+          <td>{{ customer.Age }}</td>
+          <td>{{ customer.City }}</td>
+          <td>{{ customer.Position }}</td>|
+            </form>
+          </td>
+        </tr>
+      @end
+    </tbody>
+  </table>
+  <a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>
