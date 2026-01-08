@@ -9,7 +9,7 @@
  @flashMessage('error')
   <p style="color: red;">{{ $message }}</p>
 @end
-  <form action="/customer" method="POST">
+  <form action="/customer" method="POST" enctype="multipart/form-data">
     {{ csrfField() }}
     <label>Full_Name:</label>
     <input type="txt" name="full_name" required minlength="3">
@@ -21,6 +21,8 @@
     <input type="text" name="city" required>
     <label>Position:</label>
     <input type="text" name="position" required>
+    <label>Profile Picture:</label>
+    <input type="file" name="profile_photo">
     <button type="submit">Create Customer</button>
   </form>
   <p>Go back to <a href="/dashboard">dashboard</a></p>

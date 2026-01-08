@@ -20,7 +20,7 @@ router.get('/users', [CustomerContoller, 'index'])
 router.get('/customer/show', [CustomerContoller, 'show'])
 router.post('/customer', [CustomerContoller, 'create'])
 router.get('/customer/create', [CustomerContoller, 'showcreate'])
-
+router.get('/export/customers', [CustomerContoller, 'export'])
 router.get('/customer/update', [CustomerContoller, 'update'])
 router.post('/customer/update', [CustomerContoller, 'edit'])
 

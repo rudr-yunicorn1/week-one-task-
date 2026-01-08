@@ -11,6 +11,7 @@ export default class extends BaseSchema {
       table.string('age').nullable()
       table.string('city').nullable()
       table.string('position').nullable()
+      table.string('profile_photo').nullable()
 
       table.timestamp('created_at')
       table.timestamp('updated_at')

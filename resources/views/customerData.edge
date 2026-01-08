@@ -10,7 +10,7 @@
   </style>
 </head>
 <body>
-  <h1>Users</h1>
+  <h1>Customers</h1>
   @flashMessage('success')
     <p style="color: green;">{{ $message }}</p>
   @end
@@ -22,11 +22,13 @@
     <thead>
       <tr>
         <th>ID</th>
+        <th>Profile_pic</th>
         <th>Name</th>
         <th>Email</th>
         <th>Age</th>
         <th>City</th>
         <th>Positon</th>
+        
         {{-- <th>Actions</th> --}}
       </tr>
     </thead>
@@ -34,17 +36,36 @@
       @each(customer in customer)
         <tr>
           <td>{{ customer.E_id }}</td>
+          <td>
+            @if(customer.profile_photo)
+              <img src="/uploads/profiles/{{ customer.profile_photo }}" alt="Profile Picture">
+            @else
+              No Image
+            @endif
+          </td>
           <td>{{ customer.full_name }}</td>
           <td>{{ customer.email }}</td>
           <td>{{ customer.age }}</td>
           <td>{{ customer.city }}</td>
-          <td>{{ customer.position }}</td>|
+          <td>{{ customer.position }}</td>
+           {{-- <td>
+            <a href="/customers/{{ customer.id }}">View</a> |
+            <a href="/customers/{{ customer.id }}/edit">Edit</a> |
+            <form action="/customers/{{ customer.id }}" method="POST" style="display: inline;">
+              {{ csrfField() }}
+              <input type="hidden" name="_method" value="DELETE">
+              <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
             </form>
+          </td> --}}
           </td>
         </tr>
       @end
     </tbody>
   </table>
+  <a href="/export/customers">
+    <button style="background: blue; color: white; padding: 10px;">Customers Excel</button>
+  </a>
+  <br>
   <a href="/dashboard">Back to Dashboard</a>
 </body>
 </html>
