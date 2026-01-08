@@ -2,6 +2,7 @@ import router from '@adonisjs/core/services/router'
 const AuthController = () => import('#controllers/auth_controller')
 const CustomerContoller = () => import('#controllers/customer_controller')
 import { middleware } from '#start/kernel'
+import { read } from 'node:fs'
 
 router.get('/', [AuthController, 'showLogin'])
 router.post('/login', [AuthController, 'login'])
@@ -23,7 +24,7 @@ router.get('/customer/create', [CustomerContoller, 'showcreate'])
 router.get('/export/customers', [CustomerContoller, 'export'])
 router.get('/customer/update', [CustomerContoller, 'update'])
 router.post('/customer/update', [CustomerContoller, 'edit'])
-
+router.get('/notifications/read', [AuthController, 'read'])
 router.get('/customer/delete', [CustomerContoller, 'showdelete'])
 router.get('/customer/distroy', [CustomerContoller, 'destroy'])
 

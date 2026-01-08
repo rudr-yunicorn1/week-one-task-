@@ -1,24 +1,223 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
+  <meta charset="UTF-8" />
   <title>Dashboard</title>
+
   <link rel="stylesheet" href="/style.css">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: #f3f4f6;
+      min-height: 100vh;
+    }
+
+    .navbar {
+      background: #4f46e5;
+      color: #ffffff;
+      padding: 16px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .navbar h1 {
+      font-size: 20px;
+      margin: 0;
+    }
+
+    .navbar a {
+      color: #ffffff;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+.notification-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.notification-list li {
+  padding: 12px;
+  border-bottom: 1px solid #e5e7eb;
+  font-size: 14px;
+}
+
+.notification-list li.unread {
+  background: #eef2ff;
+  border-left: 4px solid #4f46e5;
+}
+    .container {
+      padding: 24px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .welcome-card {
+      background: #ffffff;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+      margin-bottom: 24px;
+    }
+
+    .welcome-card h2 {
+      margin: 0 0 8px;
+      font-size: 22px;
+      color: #111827;
+    }
+
+    .welcome-card p {
+      margin: 0;
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .stat-card span {
+      font-size: 13px;
+      color: #6b7280;
+    }
+
+    .stat-card h3 {
+      margin: 8px 0 0;
+      font-size: 26px;
+      color: #4f46e5;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+    }
+
+    .action-card {
+      background: #ffffff;
+      padding: 18px;
+      border-radius: 10px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .action-card a {
+      text-decoration: none;
+      color: #4f46e5;
+      font-weight: 500;
+      font-size: 14px;
+    }
+
+    .action-card a:hover {
+      text-decoration: underline;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 20px;
+      font-size: 13px;
+      color: #6b7280;
+    }
+  </style>
 </head>
 <body>
-  <h1>Welcome, {{ auth.user.email }}!</h1>
-  <p>There are {{ userCount }} users registered.</p>
-  <a href="/logout">Logout</a>
-  <br>
-  <a href="/users">View Users</a>
-  <br>
-  <a href="/customer/show">View Customer</a>
-  <br>
-  <a href="/customer/create">Create Customer</a>
-  <br>
-  <a href="/customer/update">Update Customer</a>
-  <br>
-  <a href="/customer/delete">Delete Customer</a>
 
+  <!-- Top Navigation -->
+  <div class="navbar">
+    <h1>Dashboard</h1>
+    <a href="/logout">Logout</a>
+  </div>
+
+  <div class="container">
+
+    <!-- Welcome -->
+    <div class="welcome-card">
+      <h2>Welcome</h2>
+      <p>Welcome to the app.</p>
+    </div>
+    <div class="welcome-card">
+  <h2>Notifications ({{ unreadCount }})</h2>
+
+  @if(notifications.length === 0)
+    <p>No notifications</p>
+  @else
+    <ul class="notification-list">
+      @each(notification in notifications)
+        <li class="{{ notification.isRead ? '' : 'unread' }}">
+          <strong>{{ notification.title }}</strong><br>
+          <span>{{ notification.message }}</span>
+        </li>
+      @end
+    </ul>
+  @endif
+</div>
+<form action="/notifications/read" method="GET">
+  {{ csrfField() }}
+  <button>Mark all as read</button>
+</form>
+
+    <!-- Stats -->
+    <div class="stats">
+      <div class="stat-card">
+        <span>Total Users</span>
+        <h3>16</h3>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="actions">
+      <div class="action-card">
+        <span>Manage Users</span>
+        <a href="/users">View Users</a>
+      </div>
+
+      <div class="action-card">
+        <span>Customer List</span>
+        <a href="/customer/show">View Customer</a>
+      </div>
+
+      <div class="action-card">
+        <span>Create New Customer</span>
+        <a href="/customer/create">Create Customer</a>
+      </div>
+
+      <div class="action-card">
+        <span>Update Existing Customer</span>
+        <a href="/customer/update">Update Customer</a>
+      </div>
+
+      <div class="action-card">
+        <span>Remove Customer</span>
+        <a href="/customer/delete">Delete Customer</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="footer">
+    © Dashboard • AdonisJS
+  </div>
 
 </body>
 </html>

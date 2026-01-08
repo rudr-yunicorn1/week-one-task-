@@ -1,11 +1,14 @@
 import type { HttpContext } from '@adonisjs/core/http'
-
+import NotificationService from '#services/notification_service'
 import UserData from '#models/customer_Data'
 import User from '#models/user'
 import ExcelJS from 'exceljs'
 import { CustomerValidator } from '#validators/customer'
 import { cuid } from '@adonisjs/core/helpers'
 import app from '@adonisjs/core/services/app'
+import path from 'node:path'
+import fs from 'node:fs'
+import Notification from '#models/notification'
 
 export default class CustomerController {
   async index({ view }: HttpContext) {
@@ -75,13 +78,18 @@ export default class CustomerController {
       position: data.position,
       profile_photo: fileName,
     })
+    await Notification.create({
+      title: 'New Customer',
+      message: `${data.full_name} has been created`,
+    })
+
+    await NotificationService.sendNewCustomerNotification(data.full_name)
 
     return response.redirect('/customer/show')
   }
 
   async show({ view }: HttpContext) {
     const customer = await UserData.all()
-    console.log(customer)
     return view.render('customerData', { customer })
   }
 
@@ -109,6 +117,24 @@ export default class CustomerController {
 
   async destroy({ request, response }: HttpContext) {
     const email = request.input('email')
+
+    // 1. Get user first
+    const user = await UserData.query().where('email', email).first()
+
+    if (!user) {
+      return response.redirect().back()
+    }
+
+    // 2. Delete profile photo if exists
+    if (user.profile_photo) {
+      const filePath = path.join(process.cwd(), 'public/uploads/profiles', user.profile_photo)
+
+      if (fs.existsSync(filePath)) {
+        fs.unlinkSync(filePath)
+      }
+    }
+
+    // 3. Delete database record
     await UserData.query().where('email', email).delete()
 
     return response.redirect('/customer/show')

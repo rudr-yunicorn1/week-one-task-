@@ -2,6 +2,7 @@ import type { HttpContext } from '@adonisjs/core/http'
 import { loginValidator, registerValidator } from '#validators/auth' // We'll create these
 import User from '#models/user'
 import mail from '@adonisjs/mail/services/main'
+import Notification from '#models/notification'
 
 export default class AuthController {
   async googleCallback({ ally, auth, response, session }: HttpContext) {
@@ -88,11 +89,20 @@ export default class AuthController {
     await auth.use('web').logout()
     return response.redirect('/')
   }
+  async read({ response }: HttpContext) {
+    await Notification.query().where('is_read', false).update({ is_read: true })
+
+    return response.redirect().back()
+  }
 
   async dashboard({ view }: HttpContext) {
-    const result = await User.query().count('id')
-    const userCount = Number(result[0]['count'])
-    // console.log('User Count:', userCount)
-    return view.render('dashboard', { userCount })
+    const notifications = await Notification.query().orderBy('id', 'desc').limit(5)
+
+    const unreadCount = await Notification.query().where('is_read', false).count('* as total')
+
+    return view.render('dashboard', {
+      notifications,
+      unreadCount: unreadCount[0].$extras.total,
+    })
   }
 }
